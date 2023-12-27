@@ -8,18 +8,18 @@ package Model;
  *
  * @author Hanine
  */
-public class Vol {
+public class VolModel {
     private Integer idVol;
-    private Aeroport AeroportDepart;
-    private Aeroport AeroportArrive;
+    private AeroportModel AeroportDepart;
+    private AeroportModel AeroportArrive;
     private String dateDepart;
     private String dateArrive;
     private String heureDepart;
     private String heureArrive;
     private boolean reservable;
 
-    public Vol() { }
-    public Vol( Aeroport AeroportDepart, Aeroport AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
+
+    public VolModel( AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
         this.dateDepart = dateDepart;
@@ -28,7 +28,7 @@ public class Vol {
         this.heureArrive = heureArrive;
         this.reservable = reservable;
     }
-    public Vol(Integer idVol, Aeroport AeroportDepart, Aeroport AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
+    public VolModel(Integer idVol, AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
         this.idVol = idVol;
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
@@ -38,16 +38,20 @@ public class Vol {
         this.heureArrive = heureArrive;
         this.reservable = reservable;
     }
+    
+    public VolModel() {
+          }
+
 
     public void setIdVol(Integer idVol) {
         this.idVol = idVol;
     }
 
-    public void setAeroportDepart(Aeroport AeroportDepart) {
+    public void setAeroportDepart(AeroportModel AeroportDepart) {
         this.AeroportDepart = AeroportDepart;
     }
 
-    public void setAeroportArrive(Aeroport AeroportArrive) {
+    public void setAeroportArrive(AeroportModel AeroportArrive) {
         this.AeroportArrive = AeroportArrive;
     }
 
@@ -75,11 +79,11 @@ public class Vol {
         return idVol;
     }
 
-    public Aeroport getAeroportDepart() {
+    public AeroportModel getAeroportDepart() {
         return AeroportDepart;
     }
 
-    public Aeroport getAeroportArrive() {
+    public AeroportModel getAeroportArrive() {
         return AeroportArrive;
     }
 

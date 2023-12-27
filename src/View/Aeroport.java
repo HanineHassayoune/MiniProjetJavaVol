@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
+import Controler.AeroportController;
+import javax.swing.JOptionPane;
+import Model.Pays;
+import Model.AeroportModel;
+
+
 
 /**
  *
@@ -15,6 +21,31 @@ public class Aeroport extends javax.swing.JFrame {
      */
     public Aeroport() {
         initComponents();
+        selectPays.addItem("Tunis");
+        selectPays.addItem("Chine");
+        selectPays.addItem("Japon");
+        selectPays.addItem("Turquie");
+        selectPays.addItem("Canada");
+        selectPays.addItem("France");
+        selectPays.addItem("Italie");
+        selectPays.addItem("Espagne");
+        selectPays.addItem("Allemagne");
+        selectPays.addItem("Russie");
+        selectPays.addItem("Arabie saoudite");
+        selectPays.addItem("Libye");
+        selectPays.addItem("Algérie");
+        selectPays.addItem("Maroc");
+        selectPays.addItem("Nigeria");
+        selectPays.addItem("Égypte");
+        
+       
+        
+        
+        
+        
+        
+        
+        
     }
 
     /**
@@ -70,7 +101,6 @@ public class Aeroport extends javax.swing.JFrame {
             }
         });
 
-        selectPays.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         selectPays.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectPaysActionPerformed(evt);
@@ -149,7 +179,27 @@ public class Aeroport extends javax.swing.JFrame {
     }//GEN-LAST:event_inpNomActionPerformed
 
     private void btnEnvoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnvoyerActionPerformed
-        System.exit(0);
+        String nomAeroport = inpNom.getText();
+        String nomPays = selectPays.getSelectedItem().toString();
+        AeroportModel nouvelAeroport = new AeroportModel();
+        nouvelAeroport.setNomAeroport(nomAeroport);
+
+     
+        Pays pays = new Pays();
+        pays.setNomPays(nomPays);
+        nouvelAeroport.setPays(pays);
+
+        // Insérer l'aéroport dans la base de données en utilisant AeroportController
+        AeroportController aeroportController = new AeroportController();
+        boolean insertionReussie = aeroportController.insert(nouvelAeroport);
+
+        // Vérifier si l'insertion a réussi
+        if (insertionReussie) {
+            JOptionPane.showMessageDialog(this, "L'aéroport a été ajouté avec succès !");
+ 
+        } else {
+            JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de l'aéroport.");
+        }
     }//GEN-LAST:event_btnEnvoyerActionPerformed
 
     private void selectPaysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPaysActionPerformed

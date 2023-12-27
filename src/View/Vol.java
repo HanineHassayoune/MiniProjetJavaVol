@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
+import javax.swing.JOptionPane;
+import Controler.VolController;
+import Model.AeroportModel;
+import Model.VolModel;
 
 /**
  *
@@ -215,9 +219,9 @@ public class Vol extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inpDateArr, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inpDateDep, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inpDateDep, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -267,15 +271,38 @@ public class Vol extends javax.swing.JFrame {
     }//GEN-LAST:event_inpHeureDepActionPerformed
 
     private void rdoOuiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoOuiActionPerformed
-        // TODO add your handling code here:
+       rdoOui.setSelected(true);
     }//GEN-LAST:event_rdoOuiActionPerformed
 
     private void rdoNonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoNonActionPerformed
-        // TODO add your handling code here:
+        rdoNon.setSelected(false);
     }//GEN-LAST:event_rdoNonActionPerformed
 
     private void btnEnvoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnvoyerActionPerformed
-        System.exit(0);
+            AeroportModel aeroportDepart = (AeroportModel) selectArpDep.getSelectedItem();
+            AeroportModel aeroportArrive = (AeroportModel) selectArpArr.getSelectedItem();
+            String dateDepart = inpDateArr.getText();
+            String dateArrive = inpDateDep.getText();
+            String heureDepart = inpHeureDep.getText();
+            String heureArrive = inpHeureArr.getText();
+            boolean reservable = false;
+
+            if (rdoOui.isSelected()) {
+                reservable = true;
+            } else if (rdoNon.isSelected()) {
+                reservable = false;
+            }
+
+            VolModel newVol = new VolModel(aeroportDepart, aeroportArrive, dateDepart, dateArrive, heureDepart, heureArrive, reservable);
+            // Créer un nouvel objet Vol en utilisant le constructeur approprié
+           // Vol newVol = new Vol(aeroportDepart, aeroportArrive, dateDepart, dateArrive, heureDepart, heureArrive, reservable);
+
+            // Appeler la méthode insert de VolController
+            VolController uc = new VolController();
+            uc.insert(newVol);
+
+            // Optionnel : afficher un message de succès ou naviguer vers le cadre de connexion
+            JOptionPane.showMessageDialog(this, "Vol enregistré avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnEnvoyerActionPerformed
 
     private void selectArpDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArpDepActionPerformed
@@ -338,4 +365,6 @@ public class Vol extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> selectArpArr;
     private javax.swing.JComboBox<String> selectArpDep;
     // End of variables declaration//GEN-END:variables
+
+    
 }

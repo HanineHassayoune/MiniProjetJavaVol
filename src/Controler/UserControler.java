@@ -17,7 +17,7 @@ import javax.swing.*;
 
 /**
  *
- * @author OMRANI
+ * @author Hanine
  */
 public class UserControler {
  private Crude crude = new Crude();

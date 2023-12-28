@@ -16,10 +16,10 @@ public class VolModel {
     private String dateArrive;
     private String heureDepart;
     private String heureArrive;
-    private boolean reservable;
+    private int reservable;
 
 
-    public VolModel( AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
+    public VolModel( AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, int reservable) {
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
         this.dateDepart = dateDepart;
@@ -28,7 +28,7 @@ public class VolModel {
         this.heureArrive = heureArrive;
         this.reservable = reservable;
     }
-    public VolModel(Integer idVol, AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, boolean reservable) {
+    public VolModel(Integer idVol, AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, int reservable) {
         this.idVol = idVol;
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
@@ -40,7 +40,7 @@ public class VolModel {
     }
     
     public VolModel() {
-          }
+    }
 
 
     public void setIdVol(Integer idVol) {
@@ -71,7 +71,7 @@ public class VolModel {
         this.heureArrive = heureArrive;
     }
 
-    public void setReservable(boolean reservable) {
+    public void setReservable(int reservable) {
         this.reservable = reservable;
     }
 
@@ -103,7 +103,7 @@ public class VolModel {
         return heureArrive;
     }
 
-    public boolean isReservable() {
+    public int isReservable() {
         return reservable;
     }
 

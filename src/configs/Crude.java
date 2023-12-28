@@ -9,13 +9,16 @@ import java.util.logging.Logger;
 
 public class Crude {
     MyConnexion mc = MyConnexion.getInstance();
-
+   
     public boolean exeCreate(String sql){
         try {
+         
             Statement statement = mc.getConnection().createStatement();
-            statement.executeUpdate(sql);
+            int result = statement.executeUpdate(sql);
+            System.out.println("Result "+result);
             return true;
         } catch (SQLException ex) {
+             System.out.println("Result "+ex);
             return false;
         }
     }

@@ -15,31 +15,71 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Hanine
  */
-public class Vol extends javax.swing.JFrame {
+public class VolUpdate extends javax.swing.JFrame {
 
     /**
      * Creates new form Vol
      */
-    public Vol() {
-        initComponents();
-        AeroportController ac = new AeroportController();
+  
+    private VolModel selectedVol;
+    
+    VolUpdate(VolModel selectedVol) {
+    this.selectedVol = selectedVol;
+    initComponents();
+       
+   // Create an instance of AeroportController
+    AeroportController aeroportController = new AeroportController();
+
+    // Obtenez les noms des aéroports en utilisant les IDs stockés dans VolModel
+    int idAeroportDepart = selectedVol.getAeroportDepart().getIdAeroport();
+    int idAeroportArrive = selectedVol.getAeroportArrive().getIdAeroport();
+
+    System.out.println("ID Aeroport Depart: " + idAeroportDepart);
+    System.out.println("ID Aeroport Arrive: " + idAeroportArrive);
+
+    String nomAeroportDepart = aeroportController.getAeroportNameById(idAeroportDepart);
+    String nomAeroportArrive = aeroportController.getAeroportNameById(idAeroportArrive);
+
+    System.out.println("Nom Aeroport Depart: " + nomAeroportDepart);
+    System.out.println("Nom Aeroport Arrive: " + nomAeroportArrive);
+
+    // Créez des instances AeroportModel en utilisant les noms
+    AeroportModel aeroportDepartModel = new AeroportModel();
+    aeroportDepartModel.setNomAeroport(nomAeroportDepart);
+
+    AeroportModel aeroportArriveModel = new AeroportModel();
+    aeroportArriveModel.setNomAeroport(nomAeroportArrive);
+    // Obtenez les modèles actuels des JComboBox
+    DefaultComboBoxModel<String> modelDep = (DefaultComboBoxModel<String>) selectArpDep.getModel();
+    DefaultComboBoxModel<String> modelArr = (DefaultComboBoxModel<String>) selectArpArr.getModel();
+    //remplir formulaire
+    // Ajoutez les noms des aéroports aux modèles
+    modelDep.addElement(nomAeroportDepart);
+    modelArr.addElement(nomAeroportArrive);
+    inpDateArr.setText(selectedVol.getDateArrive());
+    inpDateDep.setText(selectedVol.getDateDepart());
+    inpHeureDep.setText(selectedVol.getHeureDepart());
+    inpHeureArr.setText(selectedVol.getHeureArrive());
+    if (selectedVol.isReservable()==1) {
+        rdoOui.setSelected(true);
+    } else {
+        rdoNon.setSelected(true);
+    }
+     AeroportController ac = new AeroportController();
          
         ArrayList<AeroportModel> listeAeroports = new ArrayList<>();
         listeAeroports = (ArrayList<AeroportModel>) ac.getAll();
-
-        // Nettoyer le modèle existant
-        selectArpDep.removeAllItems();
-        selectArpArr.removeAllItems();
 
         // Ajouter les aéroports au JComboBox
         for (AeroportModel aeroport : listeAeroports) {
             selectArpDep.addItem(aeroport.getNomAeroport()); 
             selectArpArr.addItem(aeroport.getNomAeroport()); 
         }
-       
+}
+
+    private VolUpdate() {
+         initComponents();
     }
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,7 +104,7 @@ public class Vol extends javax.swing.JFrame {
         rdoOui = new javax.swing.JRadioButton();
         rdoNon = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
-        btnEnvoyer = new javax.swing.JButton();
+        btnModifier = new javax.swing.JButton();
         selectArpArr = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -89,7 +129,7 @@ public class Vol extends javax.swing.JFrame {
 
         addVol.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         addVol.setForeground(new java.awt.Color(153, 153, 255));
-        addVol.setText("Ajouter Vol");
+        addVol.setText("Modifer Vol");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(153, 153, 255));
@@ -153,13 +193,13 @@ public class Vol extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(153, 153, 255));
         jLabel8.setText("Heure Arrivée");
 
-        btnEnvoyer.setBackground(new java.awt.Color(153, 153, 255));
-        btnEnvoyer.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        btnEnvoyer.setForeground(new java.awt.Color(255, 255, 255));
-        btnEnvoyer.setText("Envoyer");
-        btnEnvoyer.addActionListener(new java.awt.event.ActionListener() {
+        btnModifier.setBackground(new java.awt.Color(153, 153, 255));
+        btnModifier.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnModifier.setForeground(new java.awt.Color(255, 255, 255));
+        btnModifier.setText("Modifier");
+        btnModifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnvoyerActionPerformed(evt);
+                btnModifierActionPerformed(evt);
             }
         });
 
@@ -209,7 +249,7 @@ public class Vol extends javax.swing.JFrame {
                             .addComponent(selectArpDep, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(selectArpArr, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnEnvoyer)
+                                .addComponent(btnModifier)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(inpHeureArr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                                     .addComponent(inpHeureDep, javax.swing.GroupLayout.Alignment.LEADING)
@@ -253,7 +293,7 @@ public class Vol extends javax.swing.JFrame {
                     .addComponent(rdoOui)
                     .addComponent(rdoNon))
                 .addGap(1, 1, 1)
-                .addComponent(btnEnvoyer, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnModifier, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -295,7 +335,7 @@ public class Vol extends javax.swing.JFrame {
         rdoNon.setSelected(true);
     }//GEN-LAST:event_rdoNonActionPerformed
 
-    private void btnEnvoyerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnvoyerActionPerformed
+    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
             String aeroportDepart = selectArpDep.getSelectedItem().toString();
             String aeroportArrive = selectArpArr.getSelectedItem().toString();
 
@@ -304,6 +344,8 @@ public class Vol extends javax.swing.JFrame {
 
             int idAeroportDepart = aeroportController.getAeroportIdByName(aeroportDepart);
             int idAeroportArrive = aeroportController.getAeroportIdByName(aeroportArrive);
+            
+            System.out.println("TEST "+idAeroportDepart);
 
             // Create AeroportModel instances using the IDs
             AeroportModel aeroportDepartModel = new AeroportModel();
@@ -311,28 +353,43 @@ public class Vol extends javax.swing.JFrame {
 
             AeroportModel aeroportArriveModel = new AeroportModel();
             aeroportArriveModel.setIdAeroport(idAeroportArrive);
-
+            
+            
             String dateDepart = inpDateArr.getText();
             String dateArrive = inpDateDep.getText();
             String heureDepart = inpHeureDep.getText();
             String heureArrive = inpHeureArr.getText();
             boolean reservable = rdoOui.isSelected();
             int reservableInt = rdoOui.isSelected() ? 1 : 0;
-            // Create a new VolModel with AeroportModel instances
-            VolModel newVol = new VolModel(aeroportDepartModel, aeroportArriveModel, dateDepart, dateArrive, heureDepart, heureArrive, reservableInt);
+            System.out.println("Aeroport Depart: " + aeroportDepart);
+            System.out.println("Aeroport Arrive: " + aeroportArrive);
+            System.out.println("Date Depart: " + dateDepart);
+            System.out.println("Date Arrive: " + dateArrive);
+            System.out.println("heure Depart: " + heureDepart);
+            System.out.println("heure Arrive: " + heureArrive);
+            System.out.println("reservable: " + reservable);
+            // Get the ID of the selected flight
+            int selectedVolId = selectedVol.getIdVol();
 
-            // Appeler la méthode insert de VolController 
-            VolController uc = new VolController();
-            uc.insert(newVol);
-            this.setVisible(false);
-            Home_All_Vol homeAllVolFrame = new Home_All_Vol();
-            homeAllVolFrame.setVisible(true);
+            // Create a VolModel object with the updated information
+            VolModel updatedVol = new VolModel(aeroportDepartModel, aeroportArriveModel, dateDepart, dateArrive, heureDepart, heureArrive, reservableInt);
+        
+            updatedVol.setIdVol(selectedVolId); // Set the ID of the selected vol
+           
+                System.out.println("selectedVolId"+updatedVol);
+            // Call the update method
+            VolController volController = new VolController();
+            boolean success = volController.update(updatedVol, selectedVolId);
+      
+            // Check if the update was successful
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Flight updated successfully");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error updating flight");
+            }
 
            
-            JOptionPane.showMessageDialog(this, "Vol enregistré avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            
-           
-    }//GEN-LAST:event_btnEnvoyerActionPerformed
+    }//GEN-LAST:event_btnModifierActionPerformed
 
     private void selectArpDepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArpDepActionPerformed
         
@@ -356,27 +413,28 @@ public class Vol extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vol.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VolUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vol.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VolUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vol.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VolUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vol.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VolUpdate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Vol().setVisible(true);
+                new VolUpdate().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel addVol;
-    private javax.swing.JButton btnEnvoyer;
+    private javax.swing.JButton btnModifier;
     private javax.swing.JTextField inpDateArr;
     private javax.swing.JTextField inpDateDep;
     private javax.swing.JTextField inpHeureArr;

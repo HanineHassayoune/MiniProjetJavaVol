@@ -52,4 +52,45 @@ public class AeroportController {
     }
      
     }
+    
+    
+    
+            public int getAeroportIdByName(String nomAeroport) {
+            try {
+                String sql = "SELECT idAeroport FROM aeroport WHERE nomAeroport = '" + nomAeroport + "'";
+                ResultSet rs = crude.exeRead(sql);
+
+                if (rs.next()) {
+                    return rs.getInt("idAeroport");
+                }
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erreur  ", "Erreur ", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Return -1 if the airport is not found
+            return -1;
+        }
+            
+            
+        public String getAeroportNameById(int idAeroport) {
+        try {
+            String sql = "SELECT nomAeroport FROM aeroport WHERE idAeroport = " + idAeroport;
+            ResultSet rs = crude.exeRead(sql);
+
+            if (rs.next()) {
+                return rs.getString("nomAeroport");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erreur  ", "Erreur ", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Return null if the airport name is not found
+        return null;
+    }
+            
+            
+            
+        
 }

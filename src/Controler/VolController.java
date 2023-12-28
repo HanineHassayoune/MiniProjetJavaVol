@@ -17,43 +17,70 @@ import javax.swing.*;
  * @author Hanine
  */
 public class VolController {
-     private Crude crude = new Crude();
- 
-    public boolean insert(VolModel e) {      
-    String sql = "INSERT INTO vol(AeroportDepart, AeroportArrive, dateDepart, dateArrive, heureDepart, heureArrive, reservable) VALUES ('"
-            +e.getAeroportDepart().getIdAeroport() + "','" + e.getAeroportArrive().getIdAeroport() + "','" + e.getDateDepart() + "','" + e.getDateArrive() + "','"
-            + e.getHeureDepart() + "','" + e.getHeureArrive() + "','" + e.isReservable() + "')";
-    System.out.println(sql);
-    return crude.exeCreate(sql); 
-}
+     
+    private Crude crude = new Crude();
+
+    public boolean insert(VolModel e) {
+        try {
+            String sql = "INSERT INTO vol(AeroportDepart,AeroportArrive,dateDepart,dateArrive,heureDepart,heureArrive,reservable) VALUES ('"
+                    + e.getAeroportDepart().getIdAeroport() + "','" + e.getAeroportArrive().getIdAeroport() + "','" + e.getDateDepart() + "','" + e.getDateArrive() + "','"
+                    + e.getHeureDepart() + "','" + e.getHeureArrive() + "','" + e.isReservable() + "')";
+            System.out.println(sql);
+            return crude.exeCreate(sql);
+        } catch (Exception ex) { 
+            System.err.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erreur  ", "Erreur ", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
     
-    /* public boolean update(Vol a, Integer id) {
+     public boolean update(VolModel a, Integer id) {
         String sql =
-                "UPDATE vol SET AeroportDepart='" + a.getAeroportDepart() + "', AeroportArrive='"
-                + a.getAeroportArrive() + "' , dateDepart= '" + a.getDateDepart() + "', dateArrive = '" + a.getDateArrive() 
-                + "', heureDepart = '" + a.getHeureDepart() +"', heureArrive = '" + a.getHeureArrive() + "', reservable = '" + a.isReservable() + "' WHERE id=" + id;
+                "UPDATE vol SET AeroportDepart='" + a.getAeroportDepart().getIdAeroport() + "', AeroportArrive='"
+                + a.getAeroportArrive().getIdAeroport()+ "' , dateDepart= '" + a.getDateDepart() + "', dateArrive = '" + a.getDateArrive() 
+                + "', heureDepart = '" + a.getHeureDepart() +"', heureArrive = '" + a.getHeureArrive() + "', reservable = '" + a.isReservable() + "' WHERE idVol=" + id;
+        System.out.println(sql);
         return crude.exeUpdate(sql);    
     }
 
-    public boolean delete(Vol e) {
-        String sql = "DELETE FROM vol WHERE id=" + e.getIdVol();
-        return crude.exeDelete(sql);    
+  public boolean delete(VolModel e) {
+    try {
+        String sql = "DELETE FROM vol WHERE idVol=" + e.getIdVol();
+        System.out.println(sql);
+        return crude.exeDelete(sql);
+    } catch (Exception ex) {
+        // Print or log the exception message
+        System.err.println(ex.getMessage());
+        return false;
     }
+}
+  
+    public boolean deleteById(int e) {
+    try {
+        String sql = "DELETE FROM vol WHERE idVol=" + e;
+        System.out.println(sql);
+        return crude.exeDelete(sql);
+    } catch (Exception ex) {
+        // Print or log the exception message
+        System.err.println(ex.getMessage());
+        return false;
+    }
+}
    
 
     
-    public List<Vol> getAll() {
+    public List<VolModel> getAll() {
     try {
         String sql = "SELECT * FROM vol"; 
         ResultSet rs = crude.exeRead(sql);
-        List<Vol> liste = new ArrayList<>();
+        List<VolModel> liste = new ArrayList<>();
         while (rs.next()) {
-            Vol vol = new Vol();
+            VolModel vol = new VolModel();
             vol.setIdVol(rs.getInt(1));
             
-            Aeroport aeroportDepart = new Aeroport();
+            AeroportModel aeroportDepart = new AeroportModel();
             aeroportDepart.setIdAeroport(rs.getInt(2));
-            Aeroport aeroportArrive = new Aeroport();
+            AeroportModel aeroportArrive = new AeroportModel();
             aeroportArrive.setIdAeroport(rs.getInt(3));
             vol.setAeroportDepart(aeroportDepart);
             vol.setAeroportArrive(aeroportArrive);
@@ -62,7 +89,7 @@ public class VolController {
             vol.setDateArrive(rs.getString(5));
             vol.setHeureDepart(rs.getString(6));
             vol.setHeureArrive(rs.getString(7));
-            vol.setReservable(rs.getBoolean(8)); 
+            vol.setReservable(rs.getInt(8)); 
             liste.add(vol);
         }
         return liste;
@@ -73,7 +100,7 @@ public class VolController {
     }
 }
     
-    public Vol findByID(int id) {
+  /*  public Vol findByID(int id) {
         try {
             String sql = "SELECT * FROM vol WHERE id = "+id;
             ResultSet rs = crude.exeRead(sql);

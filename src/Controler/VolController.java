@@ -22,9 +22,9 @@ public class VolController {
 
     public boolean insert(VolModel e) {
         try {
-            String sql = "INSERT INTO vol(AeroportDepart,AeroportArrive,dateDepart,dateArrive,heureDepart,heureArrive,reservable) VALUES ('"
+            String sql = "INSERT INTO vol(AeroportDepart,AeroportArrive,dateDepart,dateArrive,heureDepart,heureArrive,codeVol,reservable) VALUES ('"
                     + e.getAeroportDepart().getIdAeroport() + "','" + e.getAeroportArrive().getIdAeroport() + "','" + e.getDateDepart() + "','" + e.getDateArrive() + "','"
-                    + e.getHeureDepart() + "','" + e.getHeureArrive() + "','" + e.isReservable() + "')";
+                    + e.getHeureDepart() + "','" + e.getHeureArrive() + "','" +e.getCodeVol()+ "','" + e.getReservable() + "')";
             System.out.println(sql);
             return crude.exeCreate(sql);
         } catch (Exception ex) { 
@@ -38,7 +38,7 @@ public class VolController {
         String sql =
                 "UPDATE vol SET AeroportDepart='" + a.getAeroportDepart().getIdAeroport() + "', AeroportArrive='"
                 + a.getAeroportArrive().getIdAeroport()+ "' , dateDepart= '" + a.getDateDepart() + "', dateArrive = '" + a.getDateArrive() 
-                + "', heureDepart = '" + a.getHeureDepart() +"', heureArrive = '" + a.getHeureArrive() + "', reservable = '" + a.isReservable() + "' WHERE idVol=" + id;
+                + "', heureDepart = '" + a.getHeureDepart() +"', heureArrive = '" + a.getHeureArrive() +"', codeVol = '"+  a.getCodeVol()+"', reservable = '" + a.getReservable() + "' WHERE idVol=" + id;
         System.out.println(sql);
         return crude.exeUpdate(sql);    
     }
@@ -67,6 +67,21 @@ public class VolController {
     }
 }
    
+    public boolean isCodeVolExists(String codeVol) {
+    try {
+        String sql = "SELECT COUNT(*) FROM vol WHERE codeVol = '" + codeVol + "'";
+        ResultSet rs = crude.exeRead(sql);
+        if (rs.next()) {
+            int count = rs.getInt(1);
+            return count > 0;
+        }
+        return false;
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+        JOptionPane.showMessageDialog(null, "Erreur lors de la vérification du code de vol", "Erreur", JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+} 
 
     
     public List<VolModel> getAll() {
@@ -89,7 +104,8 @@ public class VolController {
             vol.setDateArrive(rs.getString(5));
             vol.setHeureDepart(rs.getString(6));
             vol.setHeureArrive(rs.getString(7));
-            vol.setReservable(rs.getInt(8)); 
+            vol.setCodeVol(rs.getString(8));
+            vol.setReservable(rs.getInt(9)); 
             liste.add(vol);
         }
         return liste;
@@ -128,6 +144,40 @@ public class VolController {
     }
 */
    
+     public VolModel getVolByCode(String codeVol) {
+        try {
+            String sql = "SELECT * FROM vol WHERE codeVol = '" + codeVol + "'";
+            ResultSet rs = crude.exeRead(sql);
+
+            if (rs.next()) {
+                VolModel vol = new VolModel();
+                vol.setIdVol(rs.getInt("idVol"));
+
+                AeroportModel aeroportDepart = new AeroportModel();
+                aeroportDepart.setIdAeroport(rs.getInt("AeroportDepart"));
+                vol.setAeroportDepart(aeroportDepart);
+
+                AeroportModel aeroportArrive = new AeroportModel();
+                aeroportArrive.setIdAeroport(rs.getInt("AeroportArrive"));
+                vol.setAeroportArrive(aeroportArrive);
+
+                vol.setDateDepart(rs.getString("dateDepart"));
+                vol.setDateArrive(rs.getString("dateArrive"));
+                vol.setHeureDepart(rs.getString("heureDepart"));
+                vol.setHeureArrive(rs.getString("heureArrive"));
+                vol.setCodeVol(rs.getString("codeVol"));
+                vol.setReservable(rs.getInt("reservable"));
+
+                return vol;
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erreur lors de la récupération du vol par code", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
 
     
     

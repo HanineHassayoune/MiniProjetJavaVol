@@ -9,7 +9,7 @@ package Model;
  * @author Hanine
  */
 public class EscaleModel {
-   private int idEscale;
+
    private AeroportModel aeroport;
    private VolModel vol;
    private String heureDepart;
@@ -25,16 +25,7 @@ public class EscaleModel {
         this.heureArrive = heureArrive;
     }
 
-    public EscaleModel(int idEscale, AeroportModel aeroport, VolModel vol, String heureDepart, String heureArrive) {
-        this.idEscale = idEscale;
-        this.aeroport = aeroport;
-        this.vol = vol;
-        this.heureDepart = heureDepart;
-        this.heureArrive = heureArrive;
-    }
-    public void setIdEscale(int idEscale) {
-        this.idEscale = idEscale;
-    }
+   
 
     public void setAeroport(AeroportModel aeroport) {
         this.aeroport = aeroport;
@@ -52,9 +43,7 @@ public class EscaleModel {
         this.heureArrive = heureArrive;
     }
 
-    public int getIdEscale() {
-        return idEscale;
-    }
+   
 
     public AeroportModel getAeroport() {
         return aeroport;

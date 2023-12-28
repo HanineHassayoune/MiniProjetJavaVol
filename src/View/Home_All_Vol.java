@@ -5,6 +5,7 @@
 package View;
 
 import Controler.AeroportController;
+import Controler.EscaleController;
 import Controler.VolController;
 import Model.VolModel;
 import java.util.ArrayList;
@@ -35,12 +36,13 @@ public class Home_All_Vol extends javax.swing.JFrame {
         model.addColumn("dateArrive");
         model.addColumn("heureDepart");
         model.addColumn("heureArrive");
+         model.addColumn("codeVol");
         model.addColumn("reservable");
 
         System.out.println("Size of alu: " + alu.size());
         AeroportController aeroportController = new AeroportController();
         for (VolModel u : alu) {
-           System.out.println("Adding row: " + u.getAeroportDepart().getIdAeroport() + ", " + u.getAeroportArrive().getIdAeroport() + ", " + u.getDateDepart() + ", " + u.getDateArrive() + ", " + u.getHeureDepart() + ", " + u.getHeureArrive() + ", " + u.isReservable());
+           System.out.println("Adding row: " + u.getAeroportDepart().getIdAeroport() + ", " + u.getAeroportArrive().getIdAeroport() + ", " + u.getDateDepart() + ", " + u.getDateArrive() + ", " + u.getHeureDepart() + ", " + u.getHeureArrive() + ", " + u.getCodeVol() + ", " +u.getReservable());
             String aeroportDepartName = aeroportController.getAeroportNameById(u.getAeroportDepart().getIdAeroport());
             String aeroportArriveName = aeroportController.getAeroportNameById(u.getAeroportArrive().getIdAeroport());
             model.addRow(new Object[]{
@@ -50,7 +52,8 @@ public class Home_All_Vol extends javax.swing.JFrame {
                 u.getDateArrive(),
                 u.getHeureDepart(),
                 u.getHeureArrive(),
-                u.isReservable()
+                u.getCodeVol(),
+                u.getReservable()
             });
         }
 
@@ -61,6 +64,17 @@ public class Home_All_Vol extends javax.swing.JFrame {
         model.fireTableDataChanged();
     
         tableVol.setModel(model);
+        
+        
+        
+        
+        EscaleController escaleController = new EscaleController();
+    String maxCodeVol = escaleController.getMaxOccurrenceCodeVol();
+    String minCodeVol = escaleController.getMinOccurrenceCodeVol();
+
+    jTextField1.setText(maxCodeVol != null ? maxCodeVol : "N/A");
+    jTextField2.setText(minCodeVol != null ? minCodeVol : "N/A");
+
     }
     
     private VolModel getSelectedVolModel() {
@@ -82,11 +96,17 @@ public class Home_All_Vol extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        AddArp = new javax.swing.JButton();
+        AddEsc = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableVol = new javax.swing.JTable();
         AddVol = new javax.swing.JButton();
         UpdVol = new javax.swing.JButton();
         DelVol = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,15 +114,45 @@ public class Home_All_Vol extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
 
+        AddArp.setBackground(new java.awt.Color(153, 153, 255));
+        AddArp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        AddArp.setForeground(new java.awt.Color(255, 255, 255));
+        AddArp.setText("Ajouter Aeroport");
+        AddArp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddArpActionPerformed(evt);
+            }
+        });
+
+        AddEsc.setBackground(new java.awt.Color(153, 153, 255));
+        AddEsc.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        AddEsc.setForeground(new java.awt.Color(255, 255, 255));
+        AddEsc.setText("Ajouter Escale");
+        AddEsc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddEscActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(AddArp, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(AddEsc, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(786, 786, 786))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 73, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AddArp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AddEsc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         tableVol.setModel(new javax.swing.table.DefaultTableModel(
@@ -158,14 +208,46 @@ public class Home_All_Vol extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 255));
+        jLabel1.setText("* Les vols avec le plus petit nombre d'escales ");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 102, 255));
+        jLabel2.setText("* Les vols avec le plus grand nombre d'escales ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(AddVol, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -177,7 +259,7 @@ public class Home_All_Vol extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(AddVol, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -185,8 +267,16 @@ public class Home_All_Vol extends javax.swing.JFrame {
                         .addComponent(UpdVol, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(DelVol, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 63, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -237,6 +327,25 @@ public class Home_All_Vol extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_DelVolActionPerformed
 
+    private void AddArpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddArpActionPerformed
+            
+           Aeroport aeroportFrame = new Aeroport();
+            aeroportFrame.setVisible(true);
+    }//GEN-LAST:event_AddArpActionPerformed
+
+    private void AddEscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddEscActionPerformed
+        Escale escaleFrame = new Escale();
+        escaleFrame.setVisible(true);
+    }//GEN-LAST:event_AddEscActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -273,12 +382,18 @@ public class Home_All_Vol extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddArp;
+    private javax.swing.JButton AddEsc;
     private javax.swing.JButton AddVol;
     private javax.swing.JButton DelVol;
     private javax.swing.JButton UpdVol;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable tableVol;
     // End of variables declaration//GEN-END:variables
 }

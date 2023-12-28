@@ -16,19 +16,24 @@ public class VolModel {
     private String dateArrive;
     private String heureDepart;
     private String heureArrive;
+    private String CodeVol;
     private int reservable;
 
+    public VolModel() {
+    }
 
-    public VolModel( AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, int reservable) {
+    public VolModel(AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, String CodeVol, int reservable) {
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
         this.dateDepart = dateDepart;
         this.dateArrive = dateArrive;
         this.heureDepart = heureDepart;
         this.heureArrive = heureArrive;
+        this.CodeVol = CodeVol;
         this.reservable = reservable;
     }
-    public VolModel(Integer idVol, AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, int reservable) {
+
+    public VolModel(Integer idVol, AeroportModel AeroportDepart, AeroportModel AeroportArrive, String dateDepart, String dateArrive, String heureDepart, String heureArrive, String CodeVol, int reservable) {
         this.idVol = idVol;
         this.AeroportDepart = AeroportDepart;
         this.AeroportArrive = AeroportArrive;
@@ -36,12 +41,9 @@ public class VolModel {
         this.dateArrive = dateArrive;
         this.heureDepart = heureDepart;
         this.heureArrive = heureArrive;
+        this.CodeVol = CodeVol;
         this.reservable = reservable;
     }
-    
-    public VolModel() {
-    }
-
 
     public void setIdVol(Integer idVol) {
         this.idVol = idVol;
@@ -69,6 +71,10 @@ public class VolModel {
 
     public void setHeureArrive(String heureArrive) {
         this.heureArrive = heureArrive;
+    }
+
+    public void setCodeVol(String CodeVol) {
+        this.CodeVol = CodeVol;
     }
 
     public void setReservable(int reservable) {
@@ -103,10 +109,17 @@ public class VolModel {
         return heureArrive;
     }
 
-    public int isReservable() {
+    public String getCodeVol() {
+        return CodeVol;
+    }
+
+    public int getReservable() {
         return reservable;
     }
 
+   
+
+   
     
    
 } 

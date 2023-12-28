@@ -69,6 +69,8 @@ public class Vol extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         selectArpDep = new javax.swing.JComboBox<>();
+        CdVol = new javax.swing.JLabel();
+        cdVol = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,6 +179,16 @@ public class Vol extends javax.swing.JFrame {
             }
         });
 
+        CdVol.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        CdVol.setForeground(new java.awt.Color(153, 153, 255));
+        CdVol.setText("Code Vol");
+
+        cdVol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cdVolActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -185,6 +197,7 @@ public class Vol extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CdVol)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addVol)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -214,7 +227,8 @@ public class Vol extends javax.swing.JFrame {
                                     .addComponent(inpHeureArr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                                     .addComponent(inpHeureDep, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(inpDateDep, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(inpDateArr, javax.swing.GroupLayout.Alignment.LEADING))))))
+                                    .addComponent(inpDateArr, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cdVol, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))))))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -239,22 +253,26 @@ public class Vol extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(inpDateDep, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inpHeureDep, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inpHeureArr))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inpHeureArr, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CdVol, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                    .addComponent(cdVol, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rdoOui)
                     .addComponent(rdoNon))
                 .addGap(1, 1, 1)
                 .addComponent(btnEnvoyer, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -316,10 +334,16 @@ public class Vol extends javax.swing.JFrame {
             String dateArrive = inpDateDep.getText();
             String heureDepart = inpHeureDep.getText();
             String heureArrive = inpHeureArr.getText();
+            String codeVol = cdVol.getText();
+            VolController volController = new VolController();
+            if (volController.isCodeVolExists(codeVol)) {
+                            JOptionPane.showMessageDialog(this, "Le code de vol existe déjà. Veuillez choisir un autre code.", "Erreur", JOptionPane.ERROR_MESSAGE);
+             return; // Arrêter le traitement si le code de vol existe déjà.
+            }
             boolean reservable = rdoOui.isSelected();
             int reservableInt = rdoOui.isSelected() ? 1 : 0;
             // Create a new VolModel with AeroportModel instances
-            VolModel newVol = new VolModel(aeroportDepartModel, aeroportArriveModel, dateDepart, dateArrive, heureDepart, heureArrive, reservableInt);
+            VolModel newVol = new VolModel(aeroportDepartModel, aeroportArriveModel, dateDepart, dateArrive, heureDepart, heureArrive,codeVol ,reservableInt);
 
             // Appeler la méthode insert de VolController 
             VolController uc = new VolController();
@@ -338,6 +362,10 @@ public class Vol extends javax.swing.JFrame {
         
  
     }//GEN-LAST:event_selectArpDepActionPerformed
+
+    private void cdVolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cdVolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cdVolActionPerformed
 
     /**
      * @param args the command line arguments
@@ -375,8 +403,10 @@ public class Vol extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel CdVol;
     private javax.swing.JLabel addVol;
     private javax.swing.JButton btnEnvoyer;
+    private javax.swing.JTextField cdVol;
     private javax.swing.JTextField inpDateArr;
     private javax.swing.JTextField inpDateDep;
     private javax.swing.JTextField inpHeureArr;
